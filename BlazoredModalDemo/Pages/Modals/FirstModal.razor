@@ -1,0 +1,47 @@
+﻿@using BlazoredModalDemo.Data.ModalResults
+@using Serilog
+
+<h3>FirstModal</h3>
+
+<h4>@Content</h4>
+
+<button class="btn btn-primary" @onclick="Open2ndModal">Open 2nd Modal</button>
+<hr/>
+
+<button @onclick="NormalReturn" class="btn btn-primary">OK</button>
+<button @onclick="ModalInstance.CancelAsync" class="btn btn-secondary">Cancel</button>
+
+@code {
+    
+    [CascadingParameter] public IModalService Modal { get; set; }
+    
+    [CascadingParameter] public BlazoredModalInstance ModalInstance { get; set; }
+    
+    [Parameter] public string Content { get; set; }
+
+    private async void Open2ndModal(MouseEventArgs e)
+    {
+        var options = new ModalOptions {FocusFirstElement = false, HideCloseButton = true};
+        var parameters = new ModalParameters();
+        parameters.Add("Content", @"This is 2nd modal content");
+
+        var the1stModal = Modal.Show<SecondModal>("The second Modal", parameters, options);
+        var result = await the1stModal.Result;
+
+        if (result.Cancelled)
+        {
+            Log.Information("2nd Modal window cancelled");
+        }
+        else
+        {
+            Log.Information("2nd Modal window closed");
+        }
+    }
+
+    async void NormalReturn()
+    {
+        var modalResult = new The1stModalResult {Message = "1st Form Press OK"};
+        await ModalInstance.CloseAsync(ModalResult.Ok(modalResult));
+    }
+    
+}

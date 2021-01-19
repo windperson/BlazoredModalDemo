@@ -1,0 +1,55 @@
+﻿@using Blazored.Modal
+@using Blazored.Modal.Services
+@using BlazoredModalDemo.Pages.Modals
+@using Serilog
+
+
+<h3>ModalDemo</h3>
+
+<button class="btn btn-primary" @onclick="Open1stModal">Open 1st Modal</button>
+
+@code {
+
+    [CascadingParameter]
+    public IModalService Modal { get; set; }
+
+    private async void Open1stModal(MouseEventArgs e)
+    {
+        var options = new ModalOptions {FocusFirstElement = false, HideCloseButton = true};
+        var parameters = new ModalParameters();
+        parameters.Add("Content", @"This is 1st modal content");
+
+        var the1stModal = Modal.Show<FirstModal>("The First Modal", parameters, options);
+        var result = await the1stModal.Result;
+
+        if (result.Cancelled)
+        {
+            Log.Information("1st Modal window cancelled");
+        }
+        else
+        {
+            Log.Information("1st Modal window closed");
+        }
+    }
+
+
+    // private async void Open2ndModal(MouseEventArgs e)
+    // {
+    //     var options = new ModalOptions {FocusFirstElement = false, HideCloseButton = true};
+    //     var parameters = new ModalParameters();
+    //     parameters.Add("Content", @"This is 2nd modal content");
+    //
+    //     var the1stModal = Modal.Show<SecondModal>("The second Modal", parameters, options);
+    //     var result = await the1stModal.Result;
+    //
+    //     if (result.Cancelled)
+    //     {
+    //         Log.Information("2nd Modal window cancelled");
+    //     }
+    //     else
+    //     {
+    //         Log.Information("2nd Modal window closed");
+    //     }
+    // }
+
+}

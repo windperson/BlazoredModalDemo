@@ -1,0 +1,21 @@
+﻿@using BlazoredModalDemo.Data.ModalResults
+
+<h3>SecondModal</h3>
+
+<h4>@Content</h4>
+
+<button @onclick="NormalReturn" class="btn btn-primary">OK</button>
+<button @onclick="Modal.CancelAsync" class="btn btn-secondary">Cancel</button>
+
+@code {
+    
+    [CascadingParameter] public BlazoredModalInstance Modal { get; set; }
+    
+    [Parameter] public string Content { get; set; }
+
+    async void NormalReturn()
+    {
+        var modalResult = ModalResult.Ok(new The2ndModalResult {Message = "2nd Form press OK"});
+        await Modal.CloseAsync(ModalResult.Ok(modalResult));
+    }
+}
