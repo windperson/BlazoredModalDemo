@@ -15,10 +15,12 @@ namespace BlazoredModalDemo
     {
         public static void Main(string[] args)
         {
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
-                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT ")}.json", true)
+                .AddJsonFile($"appsettings.{env}.json", true)
                 .Build();
 
             Log.Logger = new LoggerConfiguration()
